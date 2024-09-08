@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
-import { googleProvider } from '@/lib/firebase';
+import { auth, googleProvider } from '@/lib/firebase';
 import useAuth from '@/hooks/getAuth';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
