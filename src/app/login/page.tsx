@@ -8,7 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Login() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -39,9 +39,11 @@ export default function Login() {
     }
   };
 
+  if (loading) {
+    return <p></p>;
+  }
   if (user) {
     router.push("/");
-    return;
   }
 
   return (

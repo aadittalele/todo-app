@@ -8,12 +8,12 @@ import Link from 'next/link';
 import useAuth from '@/hooks/getAuth';
 
 export default function Signup() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState("");
-  const router = useRouter();
 
   const handleSignup = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
@@ -24,7 +24,7 @@ export default function Signup() {
     }
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      router.push('/');
+      router.push("/");
     } catch (error: any) {
       console.log(error.message);
       if (error.message == "Firebase: Error (auth/email-already-in-use).") {
@@ -41,29 +41,18 @@ export default function Signup() {
 
   const handleGoogleLogin = async () => {
     try {
-      const data = await signInWithPopup(auth, googleProvider);
-      await fetch("/api/createUser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uid: data.user.uid,
-          createdAt: new Date().toISOString(),
-          email: data.user.email,
-          name: data.user.displayName
-        })
-      });
-
+      await signInWithPopup(auth, googleProvider);
       router.push("/");
     } catch (error) {
       console.error(error);
     }
   };
 
+  if (loading) {
+    return <p></p>;
+  }
   if (user) {
     router.push("/");
-    return;
   }
 
   return (
